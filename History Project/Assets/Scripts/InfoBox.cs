@@ -18,7 +18,6 @@ public class InfoBox : MonoBehaviour
         TextBox.SetText(infoList[type]);
     }
 
-
     private void init_info_data()
     {
         infoList = new List<string>();
