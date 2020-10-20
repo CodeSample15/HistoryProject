@@ -11,6 +11,7 @@ public class InfoBox : MonoBehaviour
 
     //private
     private List<string> infoList;
+    private List<Vector2> locations;
 
     void Awake()
     {

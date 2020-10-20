@@ -1,5 +1,5 @@
 ﻿/*
- *Luke Crimi
+ *Author: Luke Crimi
  *Controller.cs
  *10/19/2020
  *
@@ -20,13 +20,24 @@ public class Controller : MonoBehaviour
     [SerializeField] public Button[] Buttons;
     public Prompter prompter;
 
+    public int Year;
+
     //private
     private List<string> events;
     private List<string[]> options;
 
     private int EmpireSize;
     private int CitizenHappiness;
-    private int Money;
+    private int Population;
+    private int ColonyStrength;
+    private int NativeHostility;
+    private int Wealth;
+
+    //button logic
+    private bool buttonOnePressed;
+    private bool buttonTwoPressed;
+    private bool buttonThreePressed;
+    private bool buttonFourPressed;
 
     void Awake()
     {
@@ -34,7 +45,12 @@ public class Controller : MonoBehaviour
 
         EmpireSize = 10; //Starts off at a low value, the user has to grow or shrink it from here
         CitizenHappiness = 100;
-        Money = 0;
+        Wealth = 0;
+
+        buttonOnePressed = false;
+        buttonTwoPressed = false;
+        buttonThreePressed = false;
+        buttonFourPressed = false;
 
         hideButtons(4);
     }
@@ -80,5 +96,25 @@ public class Controller : MonoBehaviour
                 Buttons[i].transform.position = new Vector2(Buttons[i].transform.position.x, Buttons[i].transform.position.y - 500);
             }
         }
+    }
+
+    public void ButtonOnePress()
+    {
+        buttonOnePressed = true;
+    }
+
+    public void ButtonTwoPress()
+    {
+        buttonTwoPressed = true;
+    }
+
+    public void ButtonThreePress()
+    {
+        buttonThreePressed = true;
+    }
+
+    public void ButtonFourPress()
+    {
+        buttonFourPressed = true;
     }
 }
