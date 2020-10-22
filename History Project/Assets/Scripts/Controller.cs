@@ -45,6 +45,9 @@ public class Controller : MonoBehaviour
 
         EmpireSize = 10; //Starts off at a low value, the user has to grow or shrink it from here
         CitizenHappiness = 100;
+        Population = 0;
+        ColonyStrength = 1;
+        NativeHostility = 5;
         Wealth = 0;
 
         buttonOnePressed = false;
@@ -64,6 +67,8 @@ public class Controller : MonoBehaviour
     {
         events = new List<string>();
         options = new List<string[]>();
+
+        events.Add("yeet");
 
         /*
          * Order for adding a new event:
