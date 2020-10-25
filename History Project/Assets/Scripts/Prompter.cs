@@ -18,6 +18,7 @@ public class Prompter : MonoBehaviour
         finished = true;
 
         textBox = GetComponent<TextMeshProUGUI>();
+        textBox.SetText("");
     }
 
     public void printText(string text, float speed)

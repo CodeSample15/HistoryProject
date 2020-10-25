@@ -9,6 +9,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Experimental.AI;
@@ -30,6 +31,7 @@ public class Controller : MonoBehaviour
     private List<string[]> options;
 
     private int currentEvent;
+    private int maxEvents;
 
     private int EmpireSize;
     private int CitizenHappiness;
@@ -51,6 +53,7 @@ public class Controller : MonoBehaviour
     void Awake()
     {
         initLists();
+        maxEvents = events.Count;
 
         currentEvent = -1;
 
@@ -74,9 +77,21 @@ public class Controller : MonoBehaviour
 
     void Update()
     {
+        //for the information markers
         if (Input.GetMouseButtonDown(0) && !infoController.infoShowing)
         {
             infoBoxText.SetText("");
+        }
+
+        //for the events
+        if(!eventStarted && currentEvent < maxEvents-1)
+        {
+            newEvent();
+        }
+
+        if(userEntered)
+        {
+
         }
     }
 
@@ -85,11 +100,39 @@ public class Controller : MonoBehaviour
         events = new List<string>();
         options = new List<string[]>();
 
+        int option;
+
+        //intro
+        events.Add("Welcome to the Spanish Colonization Simulator!");
+        options.Add(new string[1]);
+        option = options.Count - 1;
+        options[option][0] = "Continue...";
+
+        events.Add("This game brings you through the major events during Spain's colonization of the Americas.");
+        options.Add(new string[1]);
+        option = options.Count - 1;
+        options[option][0] = "Continue...";
+
+        events.Add("Before beginning, please note that there are information markers placed around the map on screen.");
+        options.Add(new string[1]);
+        option = options.Count - 1;
+        options[option][0] = "Continue...";
+
+        events.Add("You can click on them to get information about important events that took place in those areas.");
+        options.Add(new string[1]);
+        option = options.Count - 1;
+        options[option][0] = "Continue...";
+
+        events.Add("You will also see on your screen, different stats. These are the current conditions of the Empire you are trying to grow.");
+        options.Add(new string[1]);
+        option = options.Count - 1;
+        options[option][0] = "Continue...";
+
         /*
          * Order for adding a new event:
              * events.add("(What's happening in the event.) Example: Oh no! some of your crops are damaged, what should you do?");
              * options.add(new string[(depending on how many options you want 1-4)]);
-             * option = options.Count - 1
+             * int option = options.Count - 1
              * options[option][0] = "Option 1"
              * options[option][1] = "Option 2"
              * etc...
@@ -100,6 +143,13 @@ public class Controller : MonoBehaviour
     {
         currentEvent++;
         prompter.printText(events[currentEvent], 0.01f);
+
+        showButtons(options[currentEvent].Length);
+
+        for(int i=0; i<options[currentEvent].Length; i++)
+        {
+            Buttons[i].GetComponentInChildren<TextMeshProUGUI>().SetText(options[currentEvent][i]);
+        }
     }
 
     private void userInputForEvent(int userInput)
@@ -110,15 +160,27 @@ public class Controller : MonoBehaviour
                 switch(userInput)
                 {
                     case 0:
-                        //change variable here
-                        break;
-                    case 1:
+                        hideButtons(4);
+                        eventStarted = false;
                         break;
                 }
 
                 break;
-            
 
+            case 2:
+                break;
+
+            case 3:
+                break;
+
+            case 4:
+                break;
+
+            case 5:
+                break;
+
+            case 6:
+                break;
         }
     }
 
@@ -147,20 +209,24 @@ public class Controller : MonoBehaviour
     public void ButtonOnePress()
     {
         buttonOnePressed = true;
+        userEntered = true;
     }
 
     public void ButtonTwoPress()
     {
         buttonTwoPressed = true;
+        userEntered = true;
     }
 
     public void ButtonThreePress()
     {
         buttonThreePressed = true;
+        userEntered = true;
     }
 
     public void ButtonFourPress()
     {
         buttonFourPressed = true;
+        userEntered = true;
     }
 }

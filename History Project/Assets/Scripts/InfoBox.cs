@@ -33,7 +33,7 @@ public class InfoBox : MonoBehaviour
 
     public void Update()
     {
-        Debug.Log(transform.position.x + "    " + transform.position.y);
+        //Debug.Log(transform.position.x + "    " + transform.position.y);
     }
 
     private void init_info_data()
@@ -46,21 +46,21 @@ public class InfoBox : MonoBehaviour
     {
         locations = new List<Vector2>();
 
-        locations.Add(new Vector2(-381f, 150f)); //Pacific ocean
+        locations.Add(new Vector2(-5.5f, 2f)); //Pacific ocean
     }
 
     public void getInfo()
     {
-
+        StartCoroutine(showingInfo());
         TextBox.SetText(infoList[type]);
-        TextBox.gameObject.transform.position = new Vector2(locations[type].x, locations[type].y + 5);
+        TextBox.gameObject.transform.position = new Vector2(locations[type].x, locations[type].y + 1);
     }
 
     IEnumerator showingInfo()
     {
         infoController.infoShowing = true;
 
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.5f);
 
         infoController.infoShowing = false;
     }
