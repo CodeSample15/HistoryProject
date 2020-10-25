@@ -13,6 +13,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Experimental.AI;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Controller : MonoBehaviour
@@ -24,7 +25,11 @@ public class Controller : MonoBehaviour
     public TextMeshProUGUI infoBoxText;
     public InfoController infoController;
 
-    public int Year;
+    public Animator fadeAnimation;
+    public TextMeshProUGUI failMessage;
+
+    //stats for user to see
+    public TextMeshProUGUI StatsDisplay;
 
     //private
     private List<string> events;
@@ -35,7 +40,6 @@ public class Controller : MonoBehaviour
 
     private int EmpireSize;
     private int CitizenHappiness;
-    private int Population;
     private int ColonyStrength;
     private int NativeHostility;
     private int Wealth;
@@ -49,6 +53,8 @@ public class Controller : MonoBehaviour
     //update logic
     private bool eventStarted;
     private bool userEntered;
+    private bool showingStats;
+    private bool gameIsOver;
 
     void Awake()
     {
@@ -59,7 +65,6 @@ public class Controller : MonoBehaviour
 
         EmpireSize = 10; //Starts off at a low value, the user has to grow or shrink it from here
         CitizenHappiness = 100;
-        Population = 0;
         ColonyStrength = 1;
         NativeHostility = 5;
         Wealth = 0;
@@ -71,27 +76,70 @@ public class Controller : MonoBehaviour
 
         eventStarted = false;
         userEntered = false;
+        showingStats = false;
 
         hideButtons(4);
+
+        gameIsOver = false;
+        failMessage.SetText("");
     }
 
     void Update()
     {
-        //for the information markers
-        if (Input.GetMouseButtonDown(0) && !infoController.infoShowing)
+        if (!gameIsOver)
         {
-            infoBoxText.SetText("");
-        }
+            //for the information markers
+            if (Input.GetMouseButtonDown(0) && !infoController.infoShowing)
+            {
+                infoBoxText.SetText("");
+            }
 
-        //for the events
-        if(!eventStarted && currentEvent < maxEvents-1)
-        {
-            newEvent();
-        }
+            if (Input.GetMouseButtonDown(0) && gameIsOver)
+            {
+                SceneManager.LoadScene(2);
+            }
 
-        if(userEntered)
-        {
+            //for the events
+            if (!eventStarted && currentEvent < maxEvents - 1)
+            {
+                newEvent();
+            }
+            else if (!(currentEvent < maxEvents - 1))
+            {
+                //end sequence here
+            }
 
+            if (userEntered)
+            {
+                if (buttonOnePressed)
+                    userInputForEvent(1);
+
+                if (buttonTwoPressed)
+                    userInputForEvent(2);
+
+                if (buttonThreePressed)
+                    userInputForEvent(3);
+
+                if (buttonFourPressed)
+                    userInputForEvent(4);
+
+                userEntered = false;
+                eventStarted = false;
+
+                buttonOnePressed = false;
+                buttonTwoPressed = false;
+                buttonThreePressed = false;
+                buttonFourPressed = false;
+
+                hideButtons(4);
+            }
+
+            if (eventStarted && prompter.finished)
+            {
+                showButtons(options[currentEvent].Length);
+            }
+
+            showStats();
         }
     }
 
@@ -106,27 +154,57 @@ public class Controller : MonoBehaviour
         events.Add("Welcome to the Spanish Colonization Simulator!");
         options.Add(new string[1]);
         option = options.Count - 1;
-        options[option][0] = "Continue...";
+        options[option][0] = "Continue..."; //0
 
         events.Add("This game brings you through the major events during Spain's colonization of the Americas.");
         options.Add(new string[1]);
         option = options.Count - 1;
-        options[option][0] = "Continue...";
+        options[option][0] = "Continue..."; //1
 
         events.Add("Before beginning, please note that there are information markers placed around the map on screen.");
         options.Add(new string[1]);
         option = options.Count - 1;
-        options[option][0] = "Continue...";
+        options[option][0] = "Continue..."; //2
 
         events.Add("You can click on them to get information about important events that took place in those areas.");
         options.Add(new string[1]);
         option = options.Count - 1;
-        options[option][0] = "Continue...";
+        options[option][0] = "Continue..."; //3
 
         events.Add("You will also see on your screen, different stats. These are the current conditions of the Empire you are trying to grow.");
         options.Add(new string[1]);
         option = options.Count - 1;
-        options[option][0] = "Continue...";
+        options[option][0] = "Continue..."; //4
+
+        events.Add("When you are ready to play, click play.");
+        options.Add(new string[1]);
+        option = options.Count - 1;
+        options[option][0] = "Play!"; //5
+
+        events.Add("Spanish Colonization began when Columbus set ashore in the Bahamas in 1492. You must now make the proper decisions to grow the empire.");
+        options.Add(new string[1]);
+        option = options.Count - 1;
+        options[option][0] = "Continue..."; //6
+
+        events.Add("1443: Columbus sails back go Spain. Settle in the land that he found?");
+        options.Add(new string[2]);
+        option = options.Count - 1;
+        options[option][0] = "Yes"; //7
+        options[option][1] = "No";
+
+        events.Add("Vasco Núñez de Balboa claims the Pacific ocean in the name of Spain. What should you do about this?");
+        options.Add(new string[4]);
+        option = options.Count - 1;
+        options[option][0] = "Allow it"; //8
+        options[option][1] = "Punish him for it";
+        options[option][2] = "Execute him";
+        options[option][3] = "Reward him";
+
+        events.Add("The Spanish complete the conquest of Cuba and establish the town of Havana.");
+        options.Add(new string[2]);
+        option = options.Count - 1;
+        options[option][0] = "Yes"; //9
+        options[option][1] = "No";
 
         /*
          * Order for adding a new event:
@@ -142,32 +220,31 @@ public class Controller : MonoBehaviour
     private void newEvent()
     {
         currentEvent++;
+        prompter.clear();
         prompter.printText(events[currentEvent], 0.01f);
-
-        showButtons(options[currentEvent].Length);
 
         for(int i=0; i<options[currentEvent].Length; i++)
         {
             Buttons[i].GetComponentInChildren<TextMeshProUGUI>().SetText(options[currentEvent][i]);
         }
+
+        eventStarted = true;
     }
 
     private void userInputForEvent(int userInput)
     {
+        Debug.Log(userInput);
         switch(currentEvent) 
         {
+            //intro
             case 0:
-                switch(userInput)
-                {
-                    case 0:
-                        hideButtons(4);
-                        eventStarted = false;
-                        break;
-                }
+                break;
 
+            case 1:
                 break;
 
             case 2:
+                showingStats = true;
                 break;
 
             case 3:
@@ -181,6 +258,68 @@ public class Controller : MonoBehaviour
 
             case 6:
                 break;
+
+            case 7:
+                switch (userInput)
+                {
+                    case 1:
+                        break;
+                    case 2:
+                        GameOver();
+                        break;
+                }
+
+                break;
+
+            case 8:
+                switch(userInput)
+                {
+                    case 1:
+                        break;
+
+                    case 2:
+                        CitizenHappiness -= 5;
+                        break;
+
+                    case 3:
+                        CitizenHappiness -= 10;
+                        break;
+
+                    case 4:
+                        CitizenHappiness += 5;
+                        Wealth += 5;
+                        break;
+                }
+
+                break;
+        }
+    }
+
+    private void GameOver()
+    {
+        Debug.Log("gameover");
+        fadeAnimation.SetTrigger("Fade"); //start animation
+        failMessage.SetText("Game Over! \n You failed to grow the Spanish Empire");
+        gameIsOver = true;
+    }
+
+    private void showStats()
+    {
+        if (showingStats)
+        {
+            string statsDisplayString = "";
+
+            statsDisplayString += "Empire size: " + EmpireSize + "\n";
+            statsDisplayString += "Citizen happiness: " + CitizenHappiness + "\n";
+            statsDisplayString += "Colony strength: " + ColonyStrength + "\n";
+            statsDisplayString += "Native hostility: " + NativeHostility + "\n";
+            statsDisplayString += "Wealth: " + Wealth;
+
+            StatsDisplay.SetText(statsDisplayString);
+        }
+        else
+        {
+            StatsDisplay.SetText("");
         }
     }
 

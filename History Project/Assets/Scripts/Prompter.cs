@@ -21,6 +21,11 @@ public class Prompter : MonoBehaviour
         textBox.SetText("");
     }
 
+    public void clear()
+    {
+        textBox.SetText("");
+    }
+
     public void printText(string text, float speed)
     {
         currentText = "";
