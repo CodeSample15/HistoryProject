@@ -9,6 +9,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Experimental.AI;
 using UnityEngine.UI;
@@ -19,12 +20,16 @@ public class Controller : MonoBehaviour
     [SerializeField] public GameObject TextBox;
     [SerializeField] public Button[] Buttons;
     public Prompter prompter;
+    public TextMeshProUGUI infoBoxText;
+    public InfoController infoController;
 
     public int Year;
 
     //private
     private List<string> events;
     private List<string[]> options;
+
+    private int currentEvent;
 
     private int EmpireSize;
     private int CitizenHappiness;
@@ -39,9 +44,15 @@ public class Controller : MonoBehaviour
     private bool buttonThreePressed;
     private bool buttonFourPressed;
 
+    //update logic
+    private bool eventStarted;
+    private bool userEntered;
+
     void Awake()
     {
         initLists();
+
+        currentEvent = -1;
 
         EmpireSize = 10; //Starts off at a low value, the user has to grow or shrink it from here
         CitizenHappiness = 100;
@@ -55,20 +66,24 @@ public class Controller : MonoBehaviour
         buttonThreePressed = false;
         buttonFourPressed = false;
 
+        eventStarted = false;
+        userEntered = false;
+
         hideButtons(4);
     }
 
     void Update()
     {
-        
+        if (Input.GetMouseButtonDown(0) && !infoController.infoShowing)
+        {
+            infoBoxText.SetText("");
+        }
     }
 
     private void initLists()
     {
         events = new List<string>();
         options = new List<string[]>();
-
-        events.Add("yeet");
 
         /*
          * Order for adding a new event:
@@ -79,6 +94,32 @@ public class Controller : MonoBehaviour
              * options[option][1] = "Option 2"
              * etc...
         */
+    }
+
+    private void newEvent()
+    {
+        currentEvent++;
+        prompter.printText(events[currentEvent], 0.01f);
+    }
+
+    private void userInputForEvent(int userInput)
+    {
+        switch(currentEvent) 
+        {
+            case 0:
+                switch(userInput)
+                {
+                    case 0:
+                        //change variable here
+                        break;
+                    case 1:
+                        break;
+                }
+
+                break;
+            
+
+        }
     }
 
     private void hideButtons(int options)
