@@ -9,10 +9,8 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Experimental.AI;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -195,6 +193,8 @@ public class Controller : MonoBehaviour
         option = options.Count - 1;
         options[option][0] = "Continue..."; //6
 
+        //End of intro---------------------------------------------------------------------------------------------------------------------------------------------------
+
         events.Add("1443: Columbus sails back go Spain. Settle in the land that he found?");
         options.Add(new string[2]);
         option = options.Count - 1;
@@ -244,6 +244,29 @@ public class Controller : MonoBehaviour
         options[option][0] = "Yes"; //14
         options[option][1] = "No";
 
+        events.Add("It is now 1537 and the Spanish have full control over Peru...");
+        options.Add(new string[1]);
+        option = options.Count - 1;
+        options[option][0] = "Continue..."; //15
+
+        events.Add("The Natives aren't doing well in the current encomiendas of Spanish America. What should you do?");
+        options.Add(new string[4]);
+        option = options.Count - 1;
+        options[option][0] = "Use this to your advantage and take over more land."; //16
+        options[option][1] = "Pass laws to protect them.";
+        options[option][2] = "Ignore this.";
+        options[option][3] = "Give them back some land.";
+
+        events.Add("Rich seams of silver are discoverd at Potosi (modern day Bolivia)!");
+        options.Add(new string[2]);
+        option = options.Count - 1;
+        options[option][0] = "Continue..."; //17
+
+        events.Add("La Paz is founded on the trade route between Lima and the newly discovered silver mines. It is now 1550 and there is a Spanish goods being imported and metals being exported from Latin America.");
+        options.Add(new string[1]);
+        option = options.Count - 1;
+        options[option][0] = "Finish and see results..."; //18
+
         /*
          * Order for adding a new event:
              * events.add("(What's happening in the event.) Example: Oh no! some of your crops are damaged, what should you do?");
@@ -274,7 +297,7 @@ public class Controller : MonoBehaviour
         Debug.Log(userInput);
         switch(currentEvent) 
         {
-            //intro
+            //intro (cases 0-6 are mainly here to make programming easier on my brain... Not needed except for case 3)
             case 0:
                 break;
 
@@ -405,9 +428,48 @@ public class Controller : MonoBehaviour
                 switch (userInput)
                 {
                     case 1:
+                        CitizenHappiness += 10;
+                        Wealth -= 20;
                         break;
 
                     case 2:
+                        CitizenHappiness -= 8;
+                        EmpireSize -= 90;
+                        break;
+                }
+
+                break;
+
+            case 15:
+                CitizenHappiness += 20;
+                NativeHostility += 5;
+                EmpireSize += 30;
+                Wealth += 10;
+                break;
+
+            case 16:
+                switch (userInput)
+                {
+                    case 1:
+                        EmpireSize += 40;
+                        CitizenHappiness += 5;
+                        NativeHostility -= 30;
+                        Wealth -= 100;
+                        break;
+
+                    case 2:
+                        CitizenHappiness -= 5;
+                        NativeHostility -= 10;
+                        break;
+
+                    case 3:
+                        NativeHostility += 10;
+                        break;
+
+                    case 4:
+                        CitizenHappiness -= 50;
+                        Wealth -= 70;
+                        NativeHostility -= 60;
                         break;
                 }
 
@@ -432,7 +494,7 @@ public class Controller : MonoBehaviour
             statsDisplayString += "Empire size: " + EmpireSize + "\n";
             statsDisplayString += "Citizen happiness: " + CitizenHappiness + "\n";
             statsDisplayString += "Colony strength: " + ColonyStrength + "\n";
-            statsDisplayString += "Native hostility: " + NativeHostility + "\n";
+            statsDisplayString += "Native American threat level: " + NativeHostility + "\n";
             statsDisplayString += "Wealth: " + Wealth;
 
             StatsDisplay.SetText(statsDisplayString);
