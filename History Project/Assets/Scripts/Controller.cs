@@ -67,7 +67,7 @@ public class Controller : MonoBehaviour
         CitizenHappiness = 100;
         ColonyStrength = 1;
         NativeHostility = 5;
-        Wealth = 0;
+        Wealth = 100;
 
         buttonOnePressed = false;
         buttonTwoPressed = false;
@@ -139,6 +139,15 @@ public class Controller : MonoBehaviour
                 showButtons(options[currentEvent].Length);
             }
 
+            if (EmpireSize <= 0)
+                GameOver();
+            if (CitizenHappiness <= 0)
+                GameOver();
+            if (NativeHostility >= 150)
+                GameOver();
+            if (Wealth <= 0)
+                GameOver();
+
             showStats();
         }
     }
@@ -203,7 +212,36 @@ public class Controller : MonoBehaviour
         events.Add("The Spanish complete the conquest of Cuba and establish the town of Havana.");
         options.Add(new string[2]);
         option = options.Count - 1;
-        options[option][0] = "Yes"; //9
+        options[option][0] = "Send resources to the Colony (Hernando Cortes)"; //9
+        options[option][1] = "Sit back and relax";
+
+        events.Add("The year is 1519. Try to conquer Tenochtitlan?");
+        options.Add(new string[2]);
+        option = options.Count - 1;
+        options[option][0] = "Yes"; //10
+        options[option][1] = "No";
+
+        events.Add("1525: The conquistadors begin the process of European emigration to America.");
+        options.Add(new string[1]);
+        option = options.Count - 1;
+        options[option][0] = "Continue..."; //11
+
+        events.Add("In 1531, Francisco Pizarro leads 168 men, into the territory of the Inca Empire.");
+        options.Add(new string[1]);
+        option = options.Count - 1;
+        options[option][0] = "Continue..."; //12
+
+        events.Add("Pizarro and his tiny force ambush and massacre the Inca court in Cajamarca, capturing Atahualpa himself alive. What should they do with Atahualpa? (He isn't Christian)");
+        options.Add(new string[3]);
+        option = options.Count - 1;
+        options[option][0] = "Excecute him"; //13
+        options[option][1] = "Release him";
+        options[option][2] = "Hold him captive";
+
+        events.Add("Manco Inca begins a siege of the Spaniards in Cuzco that lasts for a year. Send resources to help?");
+        options.Add(new string[2]);
+        option = options.Count - 1;
+        options[option][0] = "Yes"; //14
         options[option][1] = "No";
 
         /*
@@ -244,10 +282,10 @@ public class Controller : MonoBehaviour
                 break;
 
             case 2:
-                showingStats = true;
                 break;
 
             case 3:
+                showingStats = true;
                 break;
 
             case 4:
@@ -288,6 +326,88 @@ public class Controller : MonoBehaviour
                     case 4:
                         CitizenHappiness += 5;
                         Wealth += 5;
+                        break;
+                }
+
+                break;
+
+            case 9:
+                NativeHostility += 10;
+
+                switch (userInput)
+                {
+                    case 1:
+                        EmpireSize += 600;
+                        CitizenHappiness += 15;
+                        break;
+
+                    case 2:
+                        CitizenHappiness -= 20;
+                        EmpireSize -= 5;
+                        break;
+                }
+                break;
+
+            case 10:
+                switch (userInput)
+                {
+                    case 1:
+                        CitizenHappiness += 1;
+                        EmpireSize -= 200;
+                        NativeHostility += 10;
+                        Wealth -= 20;
+                        break;
+
+                    case 2:
+                        CitizenHappiness -= 20;
+                        Wealth -= 30;
+                        NativeHostility -= 20;
+                        break;
+
+                }
+
+                break;
+
+            case 11:
+                EmpireSize += 30;
+                CitizenHappiness += 5;
+                NativeHostility += 5;
+                break;
+
+            case 12:
+                NativeHostility += 20;
+                break;
+
+            case 13:
+                Wealth += 10;
+
+                switch(userInput)
+                {
+                    case 1:
+                        NativeHostility += 40;
+                        CitizenHappiness += 5;
+                        break;
+
+                    case 2:
+                        NativeHostility -= 40;
+                        CitizenHappiness -= 50;
+                        break;
+
+                    case 3:
+                        NativeHostility += 20;
+                        CitizenHappiness -= 10;
+                        break;
+                }
+
+                break;
+
+            case 14:
+                switch (userInput)
+                {
+                    case 1:
+                        break;
+
+                    case 2:
                         break;
                 }
 
