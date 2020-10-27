@@ -54,7 +54,7 @@ public class Controller : MonoBehaviour
     private bool showingStats;
     private bool gameIsOver;
 
-    void Awake()
+    void Start()
     {
         initLists();
         maxEvents = events.Count;
@@ -282,7 +282,7 @@ public class Controller : MonoBehaviour
     {
         currentEvent++;
         prompter.clear();
-        prompter.printText(events[currentEvent], 0.01f);
+        prompter.printText(events[currentEvent], 0.03f);
 
         for(int i=0; i<options[currentEvent].Length; i++)
         {
@@ -297,11 +297,12 @@ public class Controller : MonoBehaviour
         Debug.Log(userInput);
         switch(currentEvent) 
         {
-            //intro (cases 0-6 are mainly here to make programming easier on my brain... Not needed except for case 3)
+            //intro (cases 0-6 are mainly here to make programming easier on my brain... Not needed except for case 1 and 3)
             case 0:
                 break;
 
             case 1:
+                infoController.Show_Markers();
                 break;
 
             case 2:
@@ -474,6 +475,11 @@ public class Controller : MonoBehaviour
                 }
 
                 break;
+
+            case 17:
+                Wealth += 20;
+                EmpireSize += 30;
+                break;
         }
     }
 
@@ -509,9 +515,9 @@ public class Controller : MonoBehaviour
     {
         for(int i=0; i<options; i++)
         {
-            if(Buttons[i].transform.position.y < 300)
+            if(Buttons[i].transform.position.y < 100)
             {
-                Buttons[i].transform.position = new Vector2(Buttons[i].transform.position.x, Buttons[i].transform.position.y + 500);
+                Buttons[i].transform.position = new Vector2(Buttons[i].transform.position.x, Buttons[i].transform.position.y + 400);
             }
         }
     }
@@ -520,9 +526,9 @@ public class Controller : MonoBehaviour
     {
         for(int i=0; i<options; i++)
         {
-            if(Buttons[i].transform.position.y > 300)
+            if(Buttons[i].transform.position.y > 100)
             {
-                Buttons[i].transform.position = new Vector2(Buttons[i].transform.position.x, Buttons[i].transform.position.y - 500);
+                Buttons[i].transform.position = new Vector2(Buttons[i].transform.position.x, Buttons[i].transform.position.y - 400);
             }
         }
     }

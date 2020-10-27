@@ -8,9 +8,14 @@ public class InfoController : MonoBehaviour
     public GameObject canvas;
     public bool infoShowing;
 
+    void Start()
+    {
+        infoBoxObject.transform.position = new Vector2(10, 10);
+    }
+
     public void Show_Markers()
     {
-        int infoboxes = 1; //IMPORTANT!!!! ----> PUT THE NUMBER OF INFOBOXES HERE OR THE PROGRAM WON'T RUN CORRECTLY
+        int infoboxes = 8; //IMPORTANT!!!! ----> PUT THE NUMBER OF INFOBOXES HERE OR THE PROGRAM WON'T RUN CORRECTLY
         infoShowing = false;
 
         for(int i=0; i<infoboxes; i++)
