@@ -29,6 +29,8 @@ public class Controller : MonoBehaviour
     public Animator blackFadeAnimation;
     public Prompter endOfGamePrompter;
 
+    public Animator goHomeAnimation;
+
     public bool gameIsOver;
 
     //stats for user to see
@@ -94,7 +96,7 @@ public class Controller : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && gameIsOver && endOfGamePrompter.finished)
         {
-            SceneManager.LoadScene(2);
+            StartCoroutine(goHome());
         }
 
         if (!gameIsOver)
@@ -150,6 +152,15 @@ public class Controller : MonoBehaviour
 
             showStats();
         }
+    }
+
+    IEnumerator goHome()
+    {
+        goHomeAnimation.SetTrigger("Transition");
+
+        yield return new WaitForSeconds(1);
+
+        SceneManager.LoadScene(0);
     }
 
     private void initLists()
@@ -365,12 +376,13 @@ public class Controller : MonoBehaviour
                     case 1:
                         EmpireSize += 600;
                         CitizenHappiness += 15;
-                        Wealth -= 40;
+                        Wealth -= 50;
                         break;
 
                     case 2:
                         CitizenHappiness -= 20;
                         EmpireSize -= 5;
+                        Wealth += 30;
                         break;
                 }
                 break;
@@ -515,42 +527,42 @@ public class Controller : MonoBehaviour
         #region Calculating Score
         if (EmpireSize > 10)
         {
-            resultsString += "Your empire grew by " + (EmpireSize - 10) + "! + 25 points!\n";
+            resultsString += "Your empire grew by " + (EmpireSize - 10) + "! + 25 points!\n\n";
             score += 25;
         }
         else
         {
-            resultsString += "Your empire did not grow...\n";
+            resultsString += "Your empire did not grow...\n\n";
         }
 
         if (CitizenHappiness > 100)
         {
-            resultsString += "Your empire's citizens got happier by " + (CitizenHappiness - 100) + "! + 25 points!\n";
+            resultsString += "Your empire's citizens got happier by " + (CitizenHappiness - 100) + "! + 25 points!\n\n";
             score += 25;
         }
         else
         {
-            resultsString += "Your empire's citizens did not get happier...\n";
+            resultsString += "Your empire's citizens did not get happier...\n\n";
         }
 
         if (NativeHostility < 80)
         {
-            resultsString += "The natives' anger towards your colony was less than 80! + 25 points\n";
+            resultsString += "The natives' anger towards your colony was less than 80! + 25 points\n\n";
             score += 25;
         }
         else
         {
-            resultsString += "The natives became way too angry at your colonies...\n";
+            resultsString += "The natives became way too angry at your colonies...\n\n";
         }
 
         if (Wealth > 100)
         {
-            resultsString += "You gained +" + (Wealth - 100) + " in your empire's wealth! + 25 points!\n";
+            resultsString += "You gained +" + (Wealth - 100) + " in your empire's wealth! + 25 points!\n\n";
             score += 25;
         }
         else
         {
-            resultsString += "You did not gain any wealth from your empire...\n";
+            resultsString += "You did not gain any wealth from your empire...\n\n";
         }
         #endregion
 

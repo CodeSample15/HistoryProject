@@ -9,7 +9,7 @@ public class SceneLoader : MonoBehaviour
     [SerializeField] public Animator SceneTransition;
     [SerializeField] public float AnimationLength;
 
-    public void changScenes()
+    public void changeScenes()
     {
         StartCoroutine(transition());
     }
