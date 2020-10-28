@@ -208,13 +208,13 @@ public class Controller : MonoBehaviour
 
         //End of intro---------------------------------------------------------------------------------------------------------------------------------------------------
 
-        events.Add("1443: Columbus sails back to Spain. Start settling in the land that he found?");
+        events.Add("1443: Columbus sails back to Spain. Should you start to build your empire on the land that he found?");
         options.Add(new string[2]);
         option = options.Count - 1;
         options[option][0] = "Yes"; //7
         options[option][1] = "No";
 
-        events.Add("Vasco Núñez de Balboa claims the Pacific ocean in the name of Spain. What should you do about this?");
+        events.Add("Vasco Núñez de Balboa claims the Pacific Ocean in the name of Spain. What should you do about this?");
         options.Add(new string[4]);
         option = options.Count - 1;
         options[option][0] = "Allow it"; //8

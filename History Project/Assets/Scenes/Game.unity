@@ -1344,6 +1344,7 @@ MonoBehaviour:
   failMessage: {fileID: 1619285832}
   blackFadeAnimation: {fileID: 760313945}
   endOfGamePrompter: {fileID: 1927270267}
+  goHomeAnimation: {fileID: 1576981799}
   gameIsOver: 0
   StatsDisplay: {fileID: 112060052}
 --- !u!4 &405764556
@@ -2081,7 +2082,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1001996883}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.5, y: -1.58, z: 2.48}
+  m_LocalPosition: {x: -0.5, y: -1.58, z: 22.84}
   m_LocalScale: {x: 0.5714111, y: 0.5714111, z: 0.5714111}
   m_Children: []
   m_Father: {fileID: 0}
