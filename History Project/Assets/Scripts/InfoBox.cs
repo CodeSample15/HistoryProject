@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class InfoBox : MonoBehaviour
 {
     //public
+    [SerializeField] public Controller controller;
     [SerializeField] public InfoController infoController;
     [SerializeField] public TextMeshProUGUI TextBox;
     [SerializeField] public Prompter prompter;
@@ -35,6 +36,11 @@ public class InfoBox : MonoBehaviour
     public void Update()
     {
         //Debug.Log(transform.position.x + "    " + transform.position.y);
+
+        if (controller.gameIsOver)
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void init_info_data()
@@ -42,7 +48,7 @@ public class InfoBox : MonoBehaviour
         infoList = new List<string>();
         infoList.Add("Pacific Ocean - In 1493 the Spanish claimed the West Coast of North America due to the Papal Bull of 1493 which was when Pope Alexander VI asserted the right to colonize, convert, and enslave as well as the Treaty of Tordesillas. The claim was reinforced by Vasco Nunez de Balboa in 1513. He claimed all lands next to the Pacific Ocean for the Spanish Crown."); //Pacific ocean
         infoList.Add("Santo Domingo - In 1496 Bartholomew Columbus settled on the island and called it Hispanolia. It was the first Spanish colony set up by the Spaniards. Eventually African slaves would be brought to the colony. Present day the island consists of Haiti and the Dominican Republic. Santo Domingo was the capital of the Spanish colony."); //Santo Domingo
-        infoList.Add("Havana - Havana was discovered by the Spaiards in 1509. In 1510 Spanish Colonists traveled from Hispaniola to Cuba to explore it. Diego Velaquez de Cueller founded Havana on August 25, 1514. Diego was a conquistador who played a large role during spanish colonization. Havana would later become to serve as an important port city to the Spanish."); //Havana
+        infoList.Add("Havana - Havana was discovered by the Spaniards in 1509. In 1510 Spanish Colonists traveled from Hispaniola to Cuba to explore it. Diego Velaquez de Cueller founded Havana on August 25, 1514. Diego was a conquistador who played a large role during spanish colonization. Havana would later become to serve as an important port city to the Spanish."); //Havana
         infoList.Add("Tenochtitlan - In 1519 Hernan Cortez who was another Spanish conquistador set sail to Mexico. On August 13, 1521 Cortez conquered Tenochtitlan which marked the beginning of Spanish rule in Mexico. Cortez would make alliances with city states and rivals of the people of Tenochtitlan from other cities. Disease was also a massive killer when Cortez came to conquer new lands as the natives were not immune to diseases at all."); //Tenochtitlan
         infoList.Add("Cajamarca - Cajamarca is a city in Peru. The Battle of Cajamarca happened on November 16, 1532. A small Spanish force that was led by Francisco Pizarro ambushed the Incan ruler Atahualpa. The Spanish killed many of his people and marked the conquest of what is present day Peru. This led to the fall of the Incan empire. "); //Cajamarca
         infoList.Add("Cusco - Cusco is a city in Peru and used to be the capital of the Incan empire. The Spanish would start to colonize Cusco and would use the city as a main place for the spread and conversion of Christoianity. The Spanish would replace temples with churches and Incan palaces for mansions for the invaders. The Spanish also constructed things like cathedrals and cattle raising became important in this city."); //Cusco

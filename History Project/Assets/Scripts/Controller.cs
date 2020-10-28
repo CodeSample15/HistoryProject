@@ -26,6 +26,11 @@ public class Controller : MonoBehaviour
     public Animator fadeAnimation;
     public TextMeshProUGUI failMessage;
 
+    public Animator blackFadeAnimation;
+    public Prompter endOfGamePrompter;
+
+    public bool gameIsOver;
+
     //stats for user to see
     public TextMeshProUGUI StatsDisplay;
 
@@ -38,7 +43,6 @@ public class Controller : MonoBehaviour
 
     private int EmpireSize;
     private int CitizenHappiness;
-    private int ColonyStrength;
     private int NativeHostility;
     private int Wealth;
 
@@ -52,7 +56,6 @@ public class Controller : MonoBehaviour
     private bool eventStarted;
     private bool userEntered;
     private bool showingStats;
-    private bool gameIsOver;
 
     void Start()
     {
@@ -63,7 +66,6 @@ public class Controller : MonoBehaviour
 
         EmpireSize = 10; //Starts off at a low value, the user has to grow or shrink it from here
         CitizenHappiness = 100;
-        ColonyStrength = 1;
         NativeHostility = 5;
         Wealth = 100;
 
@@ -84,19 +86,19 @@ public class Controller : MonoBehaviour
 
     void Update()
     {
+        //for the information markers
+        if (Input.GetMouseButtonDown(0) && !infoController.infoShowing)
+        {
+            infoBoxText.SetText("");
+        }
+
+        if (Input.GetMouseButtonDown(0) && gameIsOver && endOfGamePrompter.finished)
+        {
+            SceneManager.LoadScene(2);
+        }
+
         if (!gameIsOver)
         {
-            //for the information markers
-            if (Input.GetMouseButtonDown(0) && !infoController.infoShowing)
-            {
-                infoBoxText.SetText("");
-            }
-
-            if (Input.GetMouseButtonDown(0) && gameIsOver)
-            {
-                SceneManager.LoadScene(2);
-            }
-
             //for the events
             if (!eventStarted && currentEvent < maxEvents - 1)
             {
@@ -168,7 +170,7 @@ public class Controller : MonoBehaviour
         option = options.Count - 1;
         options[option][0] = "Continue..."; //1
 
-        events.Add("Before beginning, please note that there are information markers placed around the map on screen.");
+        events.Add("Before beginning, please note that there are information markers placed around the map on the screen.");
         options.Add(new string[1]);
         option = options.Count - 1;
         options[option][0] = "Continue..."; //2
@@ -188,14 +190,14 @@ public class Controller : MonoBehaviour
         option = options.Count - 1;
         options[option][0] = "Play!"; //5
 
-        events.Add("Spanish Colonization began when Columbus set ashore in the Bahamas in 1492. You must now make the proper decisions to grow the empire.");
+        events.Add("Spanish Colonization began when Columbus set ashore in the Bahamas in 1492. You must now make the right decisions to grow the empire.");
         options.Add(new string[1]);
         option = options.Count - 1;
         options[option][0] = "Continue..."; //6
 
         //End of intro---------------------------------------------------------------------------------------------------------------------------------------------------
 
-        events.Add("1443: Columbus sails back go Spain. Settle in the land that he found?");
+        events.Add("1443: Columbus sails back to Spain. Start settling in the land that he found?");
         options.Add(new string[2]);
         option = options.Count - 1;
         options[option][0] = "Yes"; //7
@@ -205,7 +207,7 @@ public class Controller : MonoBehaviour
         options.Add(new string[4]);
         option = options.Count - 1;
         options[option][0] = "Allow it"; //8
-        options[option][1] = "Punish him for it";
+        options[option][1] = "Punish him";
         options[option][2] = "Execute him";
         options[option][3] = "Reward him";
 
@@ -258,7 +260,7 @@ public class Controller : MonoBehaviour
         options[option][3] = "Give them back some land.";
 
         events.Add("Rich seams of silver are discoverd at Potosi (modern day Bolivia)!");
-        options.Add(new string[2]);
+        options.Add(new string[1]);
         option = options.Count - 1;
         options[option][0] = "Continue..."; //17
 
@@ -363,6 +365,7 @@ public class Controller : MonoBehaviour
                     case 1:
                         EmpireSize += 600;
                         CitizenHappiness += 15;
+                        Wealth -= 40;
                         break;
 
                     case 2:
@@ -480,6 +483,10 @@ public class Controller : MonoBehaviour
                 Wealth += 20;
                 EmpireSize += 30;
                 break;
+
+            case 18:
+                GameResults();
+                break;
         }
     }
 
@@ -487,7 +494,68 @@ public class Controller : MonoBehaviour
     {
         Debug.Log("gameover");
         fadeAnimation.SetTrigger("Fade"); //start animation
-        failMessage.SetText("Game Over! \n You failed to grow the Spanish Empire");
+        failMessage.SetText("Game Over! \n You failed to grow the Spanish Empire \nClick to return to home.");
+        gameIsOver = true;
+    }
+
+    private void GameResults()
+    {
+        StartCoroutine(DoEndOfGame());
+    }
+
+    IEnumerator DoEndOfGame()
+    {
+        blackFadeAnimation.SetTrigger("Fade");
+
+        yield return new WaitForSeconds(0.8f);
+
+        string resultsString = "";
+        int score = 0;
+
+        #region Calculating Score
+        if (EmpireSize > 10)
+        {
+            resultsString += "Your empire grew by " + (EmpireSize - 10) + "! + 25 points!\n";
+            score += 25;
+        }
+        else
+        {
+            resultsString += "Your empire did not grow...\n";
+        }
+
+        if (CitizenHappiness > 100)
+        {
+            resultsString += "Your empire's citizens got happier by " + (CitizenHappiness - 100) + "! + 25 points!\n";
+            score += 25;
+        }
+        else
+        {
+            resultsString += "Your empire's citizens did not get happier...\n";
+        }
+
+        if (NativeHostility < 80)
+        {
+            resultsString += "The natives' anger towards your colony was less than 80! + 25 points\n";
+            score += 25;
+        }
+        else
+        {
+            resultsString += "The natives became way too angry at your colonies...\n";
+        }
+
+        if (Wealth > 100)
+        {
+            resultsString += "You gained +" + (Wealth - 100) + " in your empire's wealth! + 25 points!\n";
+            score += 25;
+        }
+        else
+        {
+            resultsString += "You did not gain any wealth from your empire...\n";
+        }
+        #endregion
+
+        resultsString += "Total points: " + score + " /100!\nClick anywhere to return to the home screen...";
+        endOfGamePrompter.printText(resultsString, 0.01f);
         gameIsOver = true;
     }
 
@@ -499,7 +567,6 @@ public class Controller : MonoBehaviour
 
             statsDisplayString += "Empire size: " + EmpireSize + "\n";
             statsDisplayString += "Citizen happiness: " + CitizenHappiness + "\n";
-            statsDisplayString += "Colony strength: " + ColonyStrength + "\n";
             statsDisplayString += "Native American threat level: " + NativeHostility + "\n";
             statsDisplayString += "Wealth: " + Wealth;
 
